@@ -8,7 +8,7 @@ import About from './pages/About';
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="/570_Te_Tahi/">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
