@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
 				'@': path.resolve(__dirname, '.'),
 			},
 		},
+		base: '/570_Te_Tahi/',
 		server: {
 			hmr: process.env.DISABLE_HMR !== 'true',
 		},
