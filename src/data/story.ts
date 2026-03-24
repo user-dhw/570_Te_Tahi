@@ -8,175 +8,216 @@ export interface StoryPage {
 	en: StoryContent
 	mi: StoryContent
 	image: string
+	factBox?: {
+		en: string
+		mi: string
+	}
 }
+
+const localImage = (fileName: string) =>
+	`${import.meta.env.BASE_URL}images/${fileName}`
 
 export const storyData: StoryPage[] = [
 	{
 		id: 1,
 		en: {
-			title: 'The Valley of Ōtara',
+			title: 'Te Tahi-o-Te-Rā: The Guardian of Ōtara',
 			content:
-				'In the quiet valley of Ōtara, where mist curls like soft korowai around the hills, there lived a taniwha named Te Tahi-o-Te-Rā. His home was a hidden cave beneath the shimmering waters, a place known to the people as Te Ana-o-Te Tahi. The children of the valley loved to swim near the cave—but only when the water was clear. For everyone knew: when the water glowed gold like koura, Te Tahi had returned, and it was time to leave the river in peace.',
+				'A children’s story inspired by the pūrākau of Ngāti Ngahere.',
 		},
 		mi: {
-			title: 'Te Whārua o Ōtara',
+			title: 'Te Tahi-o-Te-Rā: Te Kaitiaki o Ōtara',
 			content:
-				'Kei te whārua mātao o Ōtara, e kōpere ana te kohu ki ngā puke, e noho ana tētahi taniwha, ko Te Tahi-o-Te-Rā tōna ingoa. Ko tana kāinga he ana huna kei raro tonu i te wai, e kīia ana ko Te Ana-o-Te Tahi. He maha ngā tamariki i kaukau i taua wāhi—engari mēnā he mā te wai anake. I mōhiotia whānuitia: ki te huri koura te wai, kua hoki mai a Te Tahi, ā, me waiho rā te awa kia tau.',
+				'He pūrākau mā ngā tamariki i whakaawehia e ngā kōrero o Ngāti Ngahere.',
 		},
-		image: 'https://picsum.photos/seed/valley/800/600',
+		image: localImage('cover.png'),
 	},
 	{
 		id: 2,
 		en: {
-			title: 'Feeding the Guardian',
+			title: 'The Valley of Ōtara',
 			content:
-				'The kuia of Ngāti Ngahere would walk to the water’s edge carrying small baskets of kai. They would toss the food gently into the cave’s mouth. “Noho ora, e Te Tahi,” they whispered. Be well, Te Tahi. Some said it was a gift. Some said it was a sign of respect. And some said it was simply the way things had always been.',
+				'Long ago, in the peaceful valley of Ōtara, there lived a powerful guardian named Te Tahi-o-Te-Rā. His home was hidden beneath the river, inside a secret cave known as Te Ana-o-Te Tahi. Children often played near the water, but they were careful. Whenever the river began to glow like gold, they knew Te Tahi had returned—and it was time to stay away.',
 		},
 		mi: {
-			title: 'Te Whāngai i te Kaitiaki',
+			title: 'Te Whārua o Ōtara',
 			content:
-				'Ka haere ngā kuia o Ngāti Ngahere ki te taha o te wai. He kete kai kei ō rātou ringaringa. Ka whiua e rātou ngā kai ki roto ki te ana, me te kōrero māhaki: “Haere tonu tō ora, e Te Tahi.” He mea tuku aroha pea. He tohu whakanuia pea. He tikanga tuku iho e kore nei e memeha.',
+				'I mua noa atu, i te whārua rangimārie o Ōtara, i reira tētahi kaitiaki whai mana e noho ana, ko Te Tahi-o-Te-Rā tōna ingoa. Ko tōna kāinga he ana huna kei raro i te awa, e mōhiotia ana ko Te Ana-o-Te Tahi. He maha ngā wā i tākaro ai ngā tamariki ki te taha o te wai, engari i tūpato rātou. Ina tīmata te awa ki te titi pērā i te koura, i mōhio rātou kua hoki mai a Te Tahi—ā, kua tae ki te wā kia matara atu.',
 		},
-		image: 'https://picsum.photos/seed/feeding/800/600',
+		image: localImage('2.png'),
 	},
 	{
 		id: 3,
 		en: {
-			title: 'Te Tahi’s Lineage',
+			title: 'Feeding the Guardian',
 			content:
-				'Te Tahi-o-Te-Rā was no ordinary being. He was a mokopuna of Toroa, the great rangatira of the Mātaatua waka, and the son of Ruaihona. He grew to become a tohunga of immense power—a healer, a protector, and sometimes… someone to fear.',
+				'The elders of the village would walk to the river carrying small baskets of food. They gently offered the food into the water and said, "Noho ora, e Te Tahi." Some believed it was a gift, others believed it was respect. But for many, it was simply tradition.',
 		},
 		mi: {
-			title: 'Te Whakapapa o Te Tahi',
+			title: 'Te Whāngai i te Kaitiaki',
 			content:
-				'Ehara a Te Tahi-o-Te-Rā i te mea noa iho. He mokopuna ia nā Toroa, te rangatira o te waka Mātaatua, ā, he tama nā Ruaihona. I tipu ake hei tohunga whai mana, he kaiārahi, he kaiwhakaora, ā i ētahi wā… he tangata i matatakina.',
+				'Ka haere ngā kaumātua o te pā ki te awa, me ā rātou kete kai. Ka tuku māhaki rātou i te kai ki te wai, me te kī, "Noho ora, e Te Tahi." Ki ētahi he koha tēnei, ki ētahi he tohu whakanui. Engari ki te nuinga, he tikanga tuku iho noa iho.',
 		},
-		image: 'https://picsum.photos/seed/lineage/800/600',
+		image: localImage('3.png'),
 	},
 	{
 		id: 4,
 		en: {
-			title: 'The Sacred Rock',
+			title: 'Te Tahi’s Lineage',
 			content:
-				'Near his home stood a tall and jagged rock, rising high above the water like a guardian watching over the valley. This was Te Toka-a-Houmea. Harakeke grew from its sides, made sacred by Te Tahi’s rituals. It was here he performed karakia, here he offered prayers to ancient atua, here he held the weight of his mana.',
+				'Te Tahi came from a strong and important lineage. He was known as a tohunga—a person with deep knowledge and great power. He helped people, protected them, and guided them when needed. But sometimes, his strength made others feel afraid.',
 		},
 		mi: {
-			title: 'Te Toka Tapu',
+			title: 'Te Whakapapa o Te Tahi',
 			content:
-				'Kei tōna kāinga tētahi toka nunui, e tū whakarakei ana ki runga ake i te wai. Ko Te Toka-a-Houmea tōna ingoa. I tipu ake te harakeke i runga i taua toka, he tapu te harakeke nei, i te mea he wāhanga nui ki ngā tikanga o Te Tahi. I reira ia ka tū karakia, ka tuku whakahere ki ngā atua o nehe, ā, ka pupuri i tōna mana.',
+				'I ahu mai a Te Tahi i tētahi whakapapa kaha, hira hoki. I mōhiotia ia hei tohunga—he tangata whai mōhiotanga hōhonu, whai mana nui hoki. I āwhina ia i te iwi, i tiaki i a rātou, ā, i ārahi i a rātou i ngā wā o te hiahia. Engari i ētahi wā, nā tōna kaha i puta ai te mataku i roto i ētahi atu.',
 		},
-		image: 'https://picsum.photos/seed/rock/800/600',
+		image: localImage('4.png'),
+		factBox: {
+			en: 'Did you know? Te Tahi was a tohunga — an expert and spiritual leader.',
+			mi: 'I mōhio rānei koe? He tohunga a Te Tahi — he tohunga matatau, he kaiārahi wairua hoki.',
+		},
 	},
 	{
 		id: 5,
 		en: {
-			title: 'Fear Among His People',
+			title: 'The Sacred Rock',
 			content:
-				'But as Te Tahi grew older, his mana grew even stronger. And sometimes, when people do not understand great power, fear begins to grow too. Quiet meetings were held. Whispers travelled in the night. Until the people reached a hard decision… They must leave Te Tahi behind.',
+				'Beside the river stood a tall rock called Te Toka-a-Houmea. This place was sacred. Here, Te Tahi performed karakia, spoke to the spiritual world, and strengthened his mana.',
 		},
 		mi: {
-			title: 'Ka Tipu te Mataku',
+			title: 'Te Toka Tapu',
 			content:
-				'I te pakeketanga o Te Tahi, ka kaha ake hoki tōna mana. Ā, mēnā ka kore te iwi e mārama ki te mana nui o tētahi, ka tipu te mataku. Ka hui huna te iwi. Ka tere ngā kōrero i te pō. Ā, ka tau te whakatau taumaha… Me waiho a Te Tahi ki muri.',
+				'I te taha o te awa i tū tētahi toka tiketike e kīia ana ko Te Toka-a-Houmea. He wāhi tapu tēnei. I konei a Te Tahi i tū karakia ai, i kōrero ai ki te ao wairua, ā, i whakakaha ai i tōna mana.',
 		},
-		image: 'https://picsum.photos/seed/fear/800/600',
+		image: localImage('5.png'),
 	},
 	{
 		id: 6,
 		en: {
-			title: 'The Journey to Whakaari',
+			title: 'Fear Among His People',
 			content:
-				'One summer day, the iwi prepared to travel to Whakaari, the island of steaming cliffs and nesting tītī. They loaded their waka with kai and precious water, and then they invited Te Tahi to join them—to lead the karakia for a plentiful harvest. Trusting them, he accepted.',
+				'As time passed, Te Tahi’s power became even stronger. But the people began to misunderstand him. They whispered among themselves, meeting quietly at night. Slowly, fear took over. And they made a decision—they would leave him behind.',
 		},
 		mi: {
-			title: 'Te Haerenga ki Whakaari',
+			title: 'Te Mataku o te Iwi',
 			content:
-				'I tētahi raumati, ka whakaritea te haerenga ki Whakaari, te moutere kōuaua e rere ai te korohū. Ka utautatia ngā waka ki te kai me te wai, ā, ka tono atu rātou ki a Te Tahi kia haere hei kaiwhakahaere karakia mō te hopu tītī. Me te pono o tōna ngākau, ka whakaae ia.',
+				'I te pahemo o te wā, ka kaha ake te mana o Te Tahi. Engari ka tīmata te iwi ki te pohehe ki a ia. I kōhumuhumu rātou i waenga i a rātou anō, i hui huna i te pō. Āta haere, ka riro mā te mataku e whakahaere. Ā, ka whakatau rātou—ka waiho ia ki muri.',
 		},
-		image: 'https://picsum.photos/seed/journey/800/600',
+		image: localImage('6.png'),
 	},
 	{
 		id: 7,
 		en: {
-			title: 'Left Alone',
+			title: 'The Journey to Whakaari',
 			content:
-				'On Whakaari, Te Tahi completed the rituals. The people scattered across the island to gather tītī, while the old tohunga rested in the warm sun. But when he awoke… everyone was gone. The waka. The voices. The people he trusted. All of them. Te Tahi-o-Te-Rā had been abandoned.',
+				'As their fear grew stronger, the people began to see Te Tahi not as a protector, but as a danger. They believed his power was too great and beyond their control. Because he was too sacred to harm, they made a secret plan to remove him from their land. They invited him on a journey to Whakaari, pretending it was for important rituals. However, their true intention was to leave him there, far from their people, out of fear and misunderstanding.',
 		},
 		mi: {
-			title: 'Ka Mahue Tētahi Tangata',
+			title: 'Te Haerenga ki Whakaari',
 			content:
-				'I Whakaari, ka oti ngā karakia a Te Tahi. Ka marara te iwi ki ngā kokonga o te moutere ki te tiki tītī, ā, ka whakatā te koroua i te mahana o te rā. Engari i tōna oho—kua ngaro katoa te iwi. Kua ngaro ngā waka. Kua ngaro ngā reo. Kua ngaro ngā tāngata i arohaina e ia. Kua mahue ia ki muri.',
+				'I te kaha haere o tō rātou mataku, ka tīmata te iwi ki te titiro ki a Te Tahi ehara i te mea he kaitiaki, engari he mōrearea. I whakapono rātou he nui rawa tōna mana, ā, kei tua atu i tā rātou whakahaere. Nā te mea he tapu rawa ia kia whara, ka hangaia e rātou tētahi mahere huna kia nekehia atu ia i tō rātou whenua. I tono rātou i a ia ki tētahi haerenga ki Whakaari, me te kī he haerenga mō ngā tikanga hira. Heoi, ko tō rātou tino hiahia ko te waiho i a ia ki reira, matara atu i tō rātou iwi, nā te mataku me te pohehe.',
 		},
-		image: 'https://picsum.photos/seed/abandoned/800/600',
+		image: localImage('7.png'),
+		factBox: {
+			en: 'Whakaari = White Island',
+			mi: 'Whakaari = White Island',
+		},
 	},
 	{
 		id: 8,
 		en: {
-			title: 'Calling the Sea',
+			title: 'Left Alone',
 			content:
-				'Standing alone on the shore, Te Tahi lifted his hands to the sky. He called upon Tangaroa, upon the taniwha of the deep, upon the ancient creatures of the ocean. His voice rolled across the waves like thunder. And from the darkness of the sea rose a mighty figure—Tūtarakauika, the chief of whales.',
+				'After completing his work, Te Tahi rested under the warm sun. When he woke up, the island was silent. The waka were gone. The people were gone. He had been left behind.',
 		},
 		mi: {
-			title: 'Te Karanga ki te Moana',
+			title: 'Kua Mahue Ia',
 			content:
-				'Ka tū a Te Tahi ki te tahataha o te moana, ka hiki ake ōna ringa ki te rangi. Ka karakia ki a Tangaroa, ki ngā taniwha o te wai, ki ngā atua o te moana nui. Ka pā te reo o te tohunga ki te rāwhiti me te rāwhiti, pērā i te whatitiri. Ka pāhunu ake i te moana tētahi mea nunui—ko Tūtarakauika, te rangatira o ngā tohorā.',
+				'I muri i te otinga o ana mahi, ka whakatā a Te Tahi i raro i te rā mahana. I tōna ohonga ake, kua mārie te moutere. Kua ngaro ngā waka. Kua ngaro te iwi. Kua mahue ia ki muri.',
 		},
-		image: 'https://picsum.photos/seed/calling/800/600',
+		image: localImage('8.png'),
 	},
 	{
 		id: 9,
 		en: {
-			title: 'The Great Journey Home',
+			title: 'Calling the Sea',
 			content:
-				'Tūtarakauika glided toward the shore, his massive body breaking through the waves. Te Tahi climbed onto his back. With a powerful sweep of his tail, the great whale turned toward Whakatāne. They travelled fast—so fast that the sea frothed behind them and the red hulls of the people’s waka could be seen drifting far in the distance.',
+				'Standing alone, Te Tahi called out to the ocean. He called to Tangaroa and the creatures of the deep. His voice carried across the sea. From below the waves, a great whale appeared—Tūtarakauika.',
 		},
 		mi: {
-			title: 'Te Hokinga Nui',
+			title: 'Te Karanga ki te Moana',
 			content:
-				'Ka kau mai a Tūtarakauika ki uta, e kī ana te ao i te kaha o tana ngaru. Ka piki a Te Tahi ki runga i tōna tuarā. Ka tahuri te tohorā, ka anga tonu ki Whakatāne. Ka tere rawa te haerenga—ka koropupū te wai ki muri, ka kitea hoki ngā waka whero o te iwi e memeha atu ana ki tua.',
+				'I tōna tūnga mokemoke, ka karanga atu a Te Tahi ki te moana. I karanga ia ki a Tangaroa me ngā kirehe o te hōhonu. I haruru tōna reo puta noa i te moana. Mai i raro i ngā ngaru, ka puta ake tētahi tohorā nui—ko Tūtarakauika.',
 		},
-		image: 'https://picsum.photos/seed/whale_ride/800/600',
+		image: localImage('9.png'),
+		factBox: {
+			en: 'Tangaroa = god of the sea',
+			mi: 'Tangaroa = te atua o te moana',
+		},
 	},
 	{
 		id: 10,
 		en: {
-			title: 'The Unspoken Lesson',
+			title: 'The Great Journey Home',
 			content:
-				'When Te Tahi returned home, his people were there. The men looked at him with wide eyes, their mouths silent, their hearts shamed. Te Tahi did not shout. He did not punish. He simply said: “Waiho mā te whakamā e patu.” Let shame be the punishment. And the people understood.',
+				'Te Tahi climbed onto the whale’s back. Tūtarakauika, the chief of whales, carried him across the ocean toward home. The sea moved quickly beneath them, and far in the distance, the people’s waka could be seen.',
 		},
 		mi: {
-			title: 'Te Akoranga Nui',
+			title: 'Te Hokinga Nui',
 			content:
-				'I te taenga mai ki tōna kāinga, kāore te iwi i kōrero. Ka tūtaki ngā kanohi, ka pā te whakamā. Kāore a Te Tahi i hamumu, kāore ia i riri. Ka mea noa iho ia: “Waiho mā te whakamā e patu.” Ā, ka mārama te iwi.',
+				'I piki a Te Tahi ki runga i te tuarā o te tohorā. Ko Tūtarakauika, te rangatira o ngā tohorā, i kawe i a ia puta noa i te moana ki te kāinga. I tere te neke o te moana i raro i a rātou, ā, i tawhiti, ka kitea ngā waka o te iwi.',
 		},
-		image: 'https://picsum.photos/seed/lesson/800/600',
+		image: localImage('10.png'),
+		factBox: {
+			en: 'Did you know? Tūtarakauika is remembered as the chief of whales.',
+			mi: 'I mōhio rānei koe? E mōhiotia ana a Tūtarakauika ko te rangatira o ngā tohorā.',
+		},
 	},
 	{
 		id: 11,
 		en: {
-			title: 'Guardian of the Sea',
+			title: 'The Unspoken Lesson',
 			content:
-				'When Te Tahi-o-Te-Rā eventually left this world, his wairua returned to the ocean. There he transformed into a taniwha — a marakihau, a guardian of the deep waters. His home in Ōtara, in his underwater cave, and he travels the vast Moana-a-Toi.',
+				'When Te Tahi returned, his people stood silently before him. They felt ashamed. But Te Tahi did not punish them. Instead, he said: “Waiho mā te whakamā e patu.” Let shame be the punishment.',
 		},
 		mi: {
-			title: 'Te Wairua e Hoki Ana ki te Moana',
+			title: 'Te Akoranga Wahangū',
 			content:
-				'I te matenga o Te Tahi-o-Te-Rā, ka hoki tōna wairua ki te moana nui. Ka whakakētia ia hei taniwha ano—hei marakihau, hei kaitiaki o te Moana-a-Toi. Kei Ōtara tonu tōna rua huna, ā, ka haereere ia i te moana whānui.',
+				'I te hokinga mai o Te Tahi, i tū wahangū tōna iwi i tōna aroaro. I rongo rātou i te whakamā. Engari kīhai a Te Tahi i whiu i a rātou. Engari, ka kī ia: "Waiho mā te whakamā e patu."',
 		},
-		image: 'https://picsum.photos/seed/spirit/800/600',
+		image: localImage('11.png'),
+		factBox: {
+			en: 'Whakataukī: Waiho mā te whakamā e patu. Meaning: Let shame be the punishment.',
+			mi: 'Whakataukī: Waiho mā te whakamā e patu. Tikanga: Tukuna te whakamā hei whiu.',
+		},
 	},
 	{
 		id: 12,
 		en: {
+			title: 'Becoming the Guardian of the Sea',
+			content:
+				'After Te Tahi passed away, the creatures of the sea came to him and carried him gently into the ocean. There, his wairua (spirit) became one with the waters, and he transformed into a taniwha, a guardian of the deep, watching over the ocean and protecting those in need.',
+		},
+		mi: {
+			title: 'He Kaitiaki nō te Moana',
+			content:
+				'I muri i te matenga o Te Tahi, ka haere mai ngā kirehe o te moana ki a ia, ā, ka kawe māhaki i a ia ki te moana. I reira, ka tahi tōna wairua ki te wai, ā, ka whakakētia ia hei taniwha, he kaitiaki o te hōhonu, e titiro ana ki te moana, e tiaki ana i te hunga e hiahia ana ki te āwhina.',
+		},
+		image: localImage('12.png'),
+	},
+	{
+		id: 13,
+		en: {
 			title: 'Te Tahi Today',
 			content:
-				'Even today, the people say: If one of his descendants is lost at sea, if the waves grow rough, if danger approaches—Te Tahi or Tūtarakauika will come. They will lift the person from the ocean, carry them safely to shore, and protect them just as they once protected the tohunga of old.',
+				'Even today, people believe Te Tahi still protects the sea. When danger comes, he is there—guiding people safely home.',
 		},
 		mi: {
 			title: 'Te Tahi i ēnei rā',
 			content:
-				'Ā mohoa noa nei e kī ana te iwi: Ki te raru tētahi uri i te moana, ki te huri ngā ngaru, ki te tata te mate—ka haere mai a Te Tahi, ka haere mai rānei a Tūtarakauika. Ka hiki mai rātou i te tangata, ka whakahoki ora ki uta, pērā tonu i tā rātou mahi i ngā rā onamata.',
+				'Ahakoa i ēnei rā, e whakapono ana te iwi kei te tiaki tonu a Te Tahi i te moana. Ina puta te mōrearea, kei reira ia—e ārahi ana i te iwi kia hoki ora ki te kāinga.',
 		},
-		image: 'https://picsum.photos/seed/today/800/600',
+		image: localImage('13.png'),
 	},
 ]

@@ -14,7 +14,8 @@ const About: React.FC = () => {
           <h1 className="text-4xl font-bold text-slate-900 mb-4">About the Project</h1>
           <div className="w-24 h-1.5 bg-emerald-500 mx-auto rounded-full mb-8" />
           <p className="text-xl text-slate-600 leading-relaxed">
-            XXXXXX
+            This digital storytelling platform was created to preserve and share the rich cultural heritage of the Māori people. 
+            Our goal is to make traditional stories accessible, engaging, and educational for children everywhere.
           </p>
         </motion.div>
 
@@ -22,9 +23,14 @@ const About: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
             <p className="text-slate-700 leading-relaxed">
-             XXXXXX
+              We believe that stories are the heartbeat of a culture. For children living away from their ancestral lands, 
+              digital tools can bridge the gap and help them stay connected to their roots. This project focuses on 
+              "Te Tahi-o-Te-Rā" as a powerful example of Māori values like Kaitiakitanga (guardianship) and forgiveness.
             </p>
-           
+            <p className="text-slate-700 leading-relaxed">
+              Designed for use in classrooms and at home, the platform provides teachers with a structured way to 
+              introduce these legends and their underlying themes to young learners.
+            </p>
           </div>
           
           <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
@@ -35,8 +41,8 @@ const About: React.FC = () => {
                   JD
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900">XXX</h3>
-                  <p className="text-sm text-slate-500"> Developer & Designer</p>
+                  <h3 className="font-bold text-slate-900">Hongwei Ding</h3>
+                  <p className="text-sm text-slate-500">Lead Developer & Designer</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -44,8 +50,8 @@ const About: React.FC = () => {
                   AS
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900">XXX</h3>
-                  <p className="text-sm text-slate-500">Documentation</p>
+                  <h3 className="font-bold text-slate-900">Umme Habiba Liza</h3>
+                  <p className="text-sm text-slate-500">Documentation Lead</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -53,8 +59,8 @@ const About: React.FC = () => {
                   MT
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900">XXX</h3>
-                  <p className="text-sm text-slate-500">Presentation</p>
+                  <h3 className="font-bold text-slate-900">Shubhangi Shirsale</h3>
+                  <p className="text-sm text-slate-500">Presentation Lead</p>
                 </div>
               </div>
             </div>
@@ -70,12 +76,6 @@ const About: React.FC = () => {
           <div className="flex justify-center gap-6">
             <a href="#" className="p-3 bg-slate-800 rounded-full hover:bg-slate-700 transition-colors">
               <Mail size={24} />
-            </a>
-            <a href="#" className="p-3 bg-slate-800 rounded-full hover:bg-slate-700 transition-colors">
-              <Github size={24} />
-            </a>
-            <a href="#" className="p-3 bg-slate-800 rounded-full hover:bg-slate-700 transition-colors">
-              <Globe size={24} />
             </a>
           </div>
         </div>
