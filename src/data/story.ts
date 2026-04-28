@@ -30,7 +30,7 @@ export const storyData: StoryPage[] = [
 			content:
 				'He pūrākau mā ngā tamariki i whakaawehia e ngā kōrero o Ngāti Ngahere.',
 		},
-		image: localImage('cover.png'),
+		image: localImage('Cover.png'),
 	},
 	{
 		id: 2,
