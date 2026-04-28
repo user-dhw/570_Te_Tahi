@@ -17,8 +17,12 @@ import {
   ShoppingBasket,
   Smile,
   Frown,
-  Sparkles
+  Sparkles,
+  Puzzle,
+  Grid3X3
 } from 'lucide-react';
+
+import puzzleImg from '../../images/puzzle.png';
 
 // --- Types ---
 
@@ -245,110 +249,8 @@ const PathSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> =
 const SoundSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> = ({ language, onComplete }) => {
   const [activeSound, setActiveSound] = useState<string | null>(null);
 
-  const playSoundEffect = (id: string) => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const AudioContextConstructor = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextConstructor) {
-      return;
-    }
-
-    const audioContext = new AudioContextConstructor();
-    const startTime = audioContext.currentTime;
-    const masterGain = audioContext.createGain();
-    masterGain.gain.value = 0.18;
-    masterGain.connect(audioContext.destination);
-
-    const finishAt = id === 'waves' ? startTime + 1.8 : startTime + 2.2;
-
-    if (id === 'waves') {
-      const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 1.8, audioContext.sampleRate);
-      const noiseData = noiseBuffer.getChannelData(0);
-
-      for (let i = 0; i < noiseData.length; i += 1) {
-        noiseData[i] = Math.random() * 2 - 1;
-      }
-
-      const noiseSource = audioContext.createBufferSource();
-      noiseSource.buffer = noiseBuffer;
-
-      const bandPass = audioContext.createBiquadFilter();
-      bandPass.type = 'bandpass';
-      bandPass.frequency.value = 680;
-      bandPass.Q.value = 0.9;
-
-      const lowOsc = audioContext.createOscillator();
-      lowOsc.type = 'sine';
-      lowOsc.frequency.setValueAtTime(148, startTime);
-      lowOsc.frequency.exponentialRampToValueAtTime(110, finishAt);
-
-      const lowGain = audioContext.createGain();
-      lowGain.gain.setValueAtTime(0.5, startTime);
-      lowGain.gain.exponentialRampToValueAtTime(0.01, finishAt);
-
-      const swell = audioContext.createGain();
-      swell.gain.setValueAtTime(0.02, startTime);
-      swell.gain.exponentialRampToValueAtTime(1, startTime + 0.25);
-      swell.gain.exponentialRampToValueAtTime(0.03, finishAt);
-
-      noiseSource.connect(bandPass);
-      bandPass.connect(swell);
-      swell.connect(masterGain);
-
-      lowOsc.connect(lowGain);
-      lowGain.connect(masterGain);
-
-      noiseSource.start(startTime);
-      noiseSource.stop(finishAt);
-      lowOsc.start(startTime);
-      lowOsc.stop(finishAt);
-    } else {
-      const carrier = audioContext.createOscillator();
-      carrier.type = 'sine';
-      carrier.frequency.setValueAtTime(90, startTime);
-      carrier.frequency.exponentialRampToValueAtTime(56, startTime + 1.2);
-      carrier.frequency.exponentialRampToValueAtTime(74, finishAt);
-
-      const tremolo = audioContext.createOscillator();
-      tremolo.type = 'sine';
-      tremolo.frequency.value = 4.5;
-
-      const tremoloGain = audioContext.createGain();
-      tremoloGain.gain.value = 0.13;
-
-      const carrierGain = audioContext.createGain();
-      carrierGain.gain.setValueAtTime(0.01, startTime);
-      carrierGain.gain.exponentialRampToValueAtTime(0.7, startTime + 0.3);
-      carrierGain.gain.exponentialRampToValueAtTime(0.02, finishAt);
-
-      const filter = audioContext.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 620;
-      filter.Q.value = 1.1;
-
-      tremolo.connect(tremoloGain);
-      tremoloGain.connect(carrierGain.gain);
-
-      carrier.connect(filter);
-      filter.connect(carrierGain);
-      carrierGain.connect(masterGain);
-
-      tremolo.start(startTime);
-      carrier.start(startTime);
-      tremolo.stop(finishAt);
-      carrier.stop(finishAt);
-    }
-
-    window.setTimeout(() => {
-      audioContext.close().catch(() => undefined);
-    }, 2400);
-  };
-
   const handleSoundClick = (id: string) => {
     setActiveSound(id);
-    playSoundEffect(id);
     onComplete();
   };
 
@@ -548,22 +450,128 @@ const SymbolSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }>
   );
 };
 
+/**
+ * 5) Maori Totem Puzzle Section
+ */
+const PuzzleSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> = ({ language, onComplete }) => {
+  const GRID_SIZE = 3;
+  const TOTAL_PIECES = GRID_SIZE * GRID_SIZE;
+  const [pieces, setPieces] = useState<number[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [isSolved, setIsSolved] = useState(false);
+
+  // Initialize shuffled pieces
+  React.useEffect(() => {
+    const initial = Array.from({ length: TOTAL_PIECES }, (_, i) => i);
+    // Shuffle logic (Fisher-Yates)
+    for (let i = initial.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [initial[i], initial[j]] = [initial[j], initial[i]];
+    }
+    setPieces(initial);
+  }, []);
+
+  const handlePieceClick = (index: number) => {
+    if (isSolved) return;
+
+    if (selected === null) {
+      setSelected(index);
+    } else {
+      const newPieces = [...pieces];
+      [newPieces[selected], newPieces[index]] = [newPieces[index], newPieces[selected]];
+      setPieces(newPieces);
+      setSelected(null);
+
+      // Check if solved
+      if (newPieces.every((val, i) => val === i)) {
+        setIsSolved(true);
+        onComplete();
+      }
+    }
+  };
+
+  // Using a traditional Maori carving image
+  const imageUrl = puzzleImg;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 text-rose-600 font-bold mb-2">
+        <Grid3X3 size={24} />
+        <span className="text-xl">{language === 'en' ? 'Maori Totem Puzzle' : 'Te Tātai Toi'}</span>
+      </div>
+
+      <p className="text-lg text-slate-600 font-medium">
+        {language === 'en' 
+          ? "Swap the tiles to fix the traditional carving:" 
+          : "Whakawhitihia ngā tohu hei whakaoti i te whakairo:"}
+      </p>
+
+      <div 
+        className="grid grid-cols-3 gap-2 bg-slate-100 p-2 rounded-[2rem] shadow-inner max-w-sm mx-auto aspect-square border-4 border-slate-200"
+      >
+        {pieces.map((piece, index) => {
+          const row = Math.floor(piece / GRID_SIZE);
+          const col = piece % GRID_SIZE;
+          const isSelected = selected === index;
+
+          return (
+            <button
+              key={index}
+              onClick={() => handlePieceClick(index)}
+              className={`relative overflow-hidden rounded-xl transition-all duration-300 aspect-square border-2 ${
+                isSelected ? 'border-rose-500 scale-95 z-10 shadow-lg' : 'border-transparent'
+              } ${isSolved ? 'border-emerald-500' : ''}`}
+            >
+              <div 
+                style={{
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: '300% 300%',
+                  backgroundPosition: `${(col / (GRID_SIZE - 1)) * 100}% ${(row / (GRID_SIZE - 1)) * 100}%`,
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+              {isSelected && <div className="absolute inset-0 bg-rose-500/20" />}
+            </button>
+          );
+        })}
+      </div>
+
+      {isSolved && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-8 bg-emerald-50 border-2 border-emerald-200 rounded-[2rem] text-center"
+        >
+          <div className="text-5xl mb-4">🗿</div>
+          <h4 className="text-2xl font-bold text-emerald-800 mb-2">
+            {language === 'en' ? 'Whakairo Restored!' : 'Kua Oti te Whakairo!'}
+          </h4>
+          <p className="text-lg text-emerald-700 font-medium">
+            {language === 'en' ? "Amazing! The ancestor's image is complete." : "Mīharo! Kua tūhonotia te āhua o te tipuna."}
+          </p>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
 // --- Main Component ---
 
 const Activities: React.FC = () => {
   const [language, setLanguage] = useState<'en' | 'mi'>('en');
-  const [activeTab, setActiveTab] = useState<'sequencing' | 'path' | 'sound' | 'symbols'>('sequencing');
+  const [activeTab, setActiveTab] = useState<'sequencing' | 'path' | 'sound' | 'symbols' | 'puzzle'>('sequencing');
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
   const handleComplete = (step: string) => {
     setCompletedSteps(prev => {
       const newSet = new Set(prev).add(step);
       
-      // Trigger confetti if all 4 are done
-      if (newSet.size === 4) {
+      // Trigger confetti if all 5 are done
+      if (newSet.size === 5) {
         confetti({
-          particleCount: 150,
-          spread: 70,
+          particleCount: 200,
+          spread: 80,
           origin: { y: 0.6 },
           colors: ['#10b981', '#3b82f6', '#f43f5e', '#fbbf24']
         });
@@ -572,7 +580,7 @@ const Activities: React.FC = () => {
     });
 
     // Auto-navigate logic
-    const tabsOrder: ('sequencing' | 'path' | 'sound' | 'symbols')[] = ['sequencing', 'path', 'sound', 'symbols'];
+    const tabsOrder: ('sequencing' | 'path' | 'sound' | 'symbols' | 'puzzle')[] = ['sequencing', 'path', 'sound', 'symbols', 'puzzle'];
     const currentIndex = tabsOrder.indexOf(step as any);
     if (currentIndex !== -1 && currentIndex < tabsOrder.length - 1) {
       setTimeout(() => {
@@ -586,6 +594,7 @@ const Activities: React.FC = () => {
     { id: 'path', label: language === 'en' ? 'The Path' : 'Te Ara', icon: Compass },
     { id: 'sound', label: language === 'en' ? 'Sounds' : 'Ngā Tangi', icon: Volume2 },
     { id: 'symbols', label: language === 'en' ? 'Symbols' : 'Ngā Tohu', icon: Search },
+    { id: 'puzzle', label: language === 'en' ? 'Puzzle' : 'Panga', icon: Puzzle },
   ];
 
   return (
@@ -626,12 +635,12 @@ const Activities: React.FC = () => {
         {/* Progress Tracker */}
         <ProgressBar 
           current={completedSteps.size} 
-          total={4} 
+          total={5} 
           language={language} 
         />
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex overflow-x-auto no-scrollbar justify-start md:justify-center gap-3 mb-12 pb-4 px-2 snap-x">
           {tabs.map((tab) => {
             const isCompleted = completedSteps.has(tab.id);
             const isActive = activeTab === tab.id;
@@ -640,19 +649,19 @@ const Activities: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-3 px-8 py-5 rounded-[1.5rem] font-bold transition-all relative group overflow-hidden ${
+                className={`flex items-center gap-2 px-5 py-4 rounded-[1.2rem] font-bold transition-all relative group shrink-0 snap-center ${
                   isActive
-                    ? 'bg-slate-900 text-white shadow-2xl scale-110 z-10'
+                    ? 'bg-slate-900 text-white shadow-2xl scale-105 z-10'
                     : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 shadow-sm'
                 }`}
               >
                 <div className={`transition-transform group-hover:rotate-12 ${isActive ? 'text-emerald-400' : ''}`}>
-                  <tab.icon size={24} />
+                  <tab.icon size={20} />
                 </div>
-                <span className="text-lg">{tab.label}</span>
+                <span className="text-base whitespace-nowrap">{tab.label}</span>
                 {isCompleted && (
-                  <div className="absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1.5 shadow-lg border-2 border-white">
-                    <Check size={14} strokeWidth={4} />
+                  <div className="absolute top-1 right-1 bg-emerald-500 text-white rounded-full p-1 shadow-lg border-2 border-white">
+                    <Check size={10} strokeWidth={4} />
                   </div>
                 )}
               </button>
@@ -674,6 +683,7 @@ const Activities: React.FC = () => {
               {activeTab === 'path' && <PathSection language={language} onComplete={() => handleComplete('path')} />}
               {activeTab === 'sound' && <SoundSection language={language} onComplete={() => handleComplete('sound')} />}
               {activeTab === 'symbols' && <SymbolSection language={language} onComplete={() => handleComplete('symbols')} />}
+              {activeTab === 'puzzle' && <PuzzleSection language={language} onComplete={() => handleComplete('puzzle')} />}
             </motion.div>
           </AnimatePresence>
         </div>
