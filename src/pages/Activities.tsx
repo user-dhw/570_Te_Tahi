@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { 
@@ -244,12 +244,197 @@ const PathSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> =
 };
 
 /**
- * 3) Sound the Story Section
+ * 3) Sound the Story Section (WebAudio implementation)
  */
 const SoundSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> = ({ language, onComplete }) => {
   const [activeSound, setActiveSound] = useState<string | null>(null);
 
+  // WebAudio refs
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sourcesRef = useRef<
+    Record<
+      string,
+      {
+        sources: AudioScheduledSourceNode[];
+        nodes: AudioNode[];
+      }
+    >
+  >({});
+
+  useEffect(() => {
+    return () => {
+      // stop and cleanup
+      Object.values(sourcesRef.current).forEach((s) => {
+        s.sources.forEach((src) => {
+          try { src.stop(); } catch (e) {}
+          try { src.disconnect(); } catch (e) {}
+        });
+        s.nodes.forEach((n) => {
+          try { n.disconnect(); } catch (e) {}
+        });
+      });
+      sourcesRef.current = {};
+      if (audioCtxRef.current) {
+        try { audioCtxRef.current.close(); } catch (e) {}
+        audioCtxRef.current = null;
+      }
+    };
+  }, []);
+
+  const getAudioContext = () => {
+    if (!audioCtxRef.current) {
+      const C = (window as any).AudioContext || (window as any).webkitAudioContext;
+      audioCtxRef.current = new C();
+    }
+    // resume if suspended
+    if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+      audioCtxRef.current.resume().catch(() => {});
+    }
+    return audioCtxRef.current!;
+  };
+
+  const stopAll = () => {
+    Object.values(sourcesRef.current).forEach((s) => {
+      s.sources.forEach((src) => {
+        try { src.stop(); } catch (e) {}
+        try { src.disconnect(); } catch (e) {}
+      });
+      s.nodes.forEach((n) => {
+        try { n.disconnect(); } catch (e) {}
+      });
+    });
+    sourcesRef.current = {};
+  };
+
+  const playWaves = () => {
+    const ctx = getAudioContext();
+    // create pink-ish noise buffer and loop it to simulate waves
+    const duration = 4; // seconds
+    const sampleCount = Math.floor(ctx.sampleRate * duration);
+    const buffer = ctx.createBuffer(1, sampleCount, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let b0 = 0;
+    let b1 = 0;
+    let b2 = 0;
+    let b3 = 0;
+    let b4 = 0;
+    let b5 = 0;
+    let b6 = 0;
+
+    for (let i = 0; i < sampleCount; i++) {
+      const white = Math.random() * 2 - 1;
+      // pink noise approximation
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      const pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+      b6 = white * 0.115926;
+
+      const t = i / sampleCount;
+      const swell = 0.5 + 0.5 * Math.sin(2 * Math.PI * t);
+      data[i] = (pink * 0.12) * (0.6 + 0.4 * swell);
+    }
+
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.loop = true;
+
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 120;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 2200;
+
+    const gain = ctx.createGain();
+    gain.gain.value = 0.18;
+
+    const swellGain = ctx.createGain();
+    swellGain.gain.value = 0.8;
+    const swellOsc = ctx.createOscillator();
+    swellOsc.type = 'sine';
+    swellOsc.frequency.value = 0.08;
+    swellOsc.connect(swellGain);
+    swellGain.connect(gain.gain);
+
+    src.connect(hp);
+    hp.connect(lp);
+    lp.connect(gain);
+    gain.connect(ctx.destination);
+
+    swellOsc.start();
+    src.start();
+
+    sourcesRef.current['waves'] = {
+      sources: [src, swellOsc],
+      nodes: [hp, lp, gain, swellGain]
+    };
+  };
+
+  const playWhale = () => {
+    const ctx = getAudioContext();
+
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'sine';
+    osc2.type = 'sine';
+
+    const gain = ctx.createGain();
+    gain.gain.value = 0;
+
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 900;
+
+    // slow pitch drift
+    const lfo = ctx.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.12;
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.value = 25; // Hz depth
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc1.frequency);
+    lfoGain.connect(osc2.frequency);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(lp);
+    lp.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+    osc1.frequency.setValueAtTime(90, now);
+    osc2.frequency.setValueAtTime(120, now);
+    osc1.frequency.exponentialRampToValueAtTime(140, now + 4.5);
+    osc2.frequency.exponentialRampToValueAtTime(170, now + 4.5);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.45, now + 1.2);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 7.5);
+
+    osc1.start();
+    osc2.start();
+    lfo.start();
+
+    const stopAt = now + 8;
+    osc1.stop(stopAt);
+    osc2.stop(stopAt);
+    lfo.stop(stopAt);
+
+    sourcesRef.current['whale'] = {
+      sources: [osc1, osc2, lfo],
+      nodes: [gain, lp, lfoGain]
+    };
+  };
+
   const handleSoundClick = (id: string) => {
+    stopAll();
+    if (id === 'waves') playWaves();
+    if (id === 'whale') playWhale();
     setActiveSound(id);
     onComplete();
   };
