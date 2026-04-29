@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Shield, Heart, Users, Zap, Languages } from 'lucide-react';
+import { Shield, Heart, Users, Zap } from 'lucide-react';
 
 interface ThemeContent {
   title: string;
@@ -85,7 +85,6 @@ const Themes: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100">
-            <Languages size={20} className="text-slate-400 ml-2" />
             <div className="flex gap-1">
               {languages.map((lang) => (
                 <button

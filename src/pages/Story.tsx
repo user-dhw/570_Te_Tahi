@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { storyData } from '../data/story';
 import StoryViewer from '../components/StoryViewer';
-import { Languages } from 'lucide-react';
 
 const Story: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -37,7 +36,6 @@ const Story: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
-            <Languages size={20} className="text-slate-400 ml-2" />
             <div className="flex gap-1">
               {languages.map((lang) => (
                 <button

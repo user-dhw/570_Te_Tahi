@@ -4,7 +4,6 @@ import confetti from 'canvas-confetti';
 import { 
   CheckCircle2, 
   Circle, 
-  Languages, 
   ArrowRight, 
   RotateCcw, 
   Heart, 
@@ -849,7 +848,6 @@ const Activities: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
-            <Languages size={20} className="text-slate-400 ml-2" />
             <div className="flex gap-1">
               {(['en', 'mi'] as const).map((code) => (
                 <button
