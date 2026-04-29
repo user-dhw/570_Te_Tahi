@@ -42,7 +42,7 @@ const About: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900">Hongwei Ding</h3>
-                  <p className="text-sm text-slate-500">Lead Developer & Designer</p>
+                  <p className="text-sm text-slate-500">Prototype Development & UI Design</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -51,7 +51,7 @@ const About: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900">Umme Habiba Liza</h3>
-                  <p className="text-sm text-slate-500">Documentation Lead</p>
+                  <p className="text-sm text-slate-500">Story Research & Documentation</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -60,7 +60,7 @@ const About: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900">Shubhangi Shirsale</h3>
-                  <p className="text-sm text-slate-500">Presentation Lead</p>
+                  <p className="text-sm text-slate-500">Client Feedback Analysis</p>
                 </div>
               </div>
             </div>
