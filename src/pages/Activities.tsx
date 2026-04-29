@@ -65,6 +65,8 @@ const ProgressBar: React.FC<{ current: number; total: number; language: 'en' | '
 const SequencingSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => void }> = ({ language, onComplete }) => {
   const [userOrder, setUserOrder] = useState<number[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [selectionFeedback, setSelectionFeedback] = useState<'correct' | 'wrong' | null>(null);
 
   const events: StoryEvent[] = language === 'en' ? [
     { id: 0, text: "Te Tahi lives in Ōtara." },
@@ -84,18 +86,33 @@ const SequencingSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => voi
     if (isSubmitted) return;
     if (userOrder.includes(id)) {
       setUserOrder(userOrder.filter(item => item !== id));
+      setSelectionFeedback(null);
     } else if (userOrder.length < events.length) {
+      const expectedId = events[userOrder.length].id;
+      if (id !== expectedId) {
+        setSelectionFeedback('wrong');
+        return;
+      }
       const newOrder = [...userOrder, id];
       setUserOrder(newOrder);
-      if (newOrder.length === events.length) {
-        // Auto check if the user completed it
-      }
+      setSelectionFeedback('correct');
     }
   };
 
   const handleSubmit = () => {
+    const correct = userOrder.every((id, index) => id === events[index].id);
     setIsSubmitted(true);
-    onComplete();
+    setIsCorrect(correct);
+    if (correct) {
+      onComplete();
+    }
+  };
+
+  const handleRetry = () => {
+    setUserOrder([]);
+    setIsSubmitted(false);
+    setIsCorrect(null);
+    setSelectionFeedback(null);
   };
 
   return (
@@ -136,6 +153,18 @@ const SequencingSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => voi
         })}
       </div>
 
+      {selectionFeedback && !isSubmitted && (
+        <div className={`p-4 rounded-2xl border text-center font-bold ${
+          selectionFeedback === 'correct'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+            : 'bg-rose-50 border-rose-200 text-rose-700'
+        }`}>
+          {selectionFeedback === 'correct'
+            ? (language === 'en' ? 'Nice! Keep going. 😊' : 'Ka pai! Haere tonu. 😊')
+            : (language === 'en' ? 'Not this one. 😢' : 'Ehara tēnei. 😢')}
+        </div>
+      )}
+
       {!isSubmitted ? (
         <button
           disabled={userOrder.length < events.length}
@@ -148,7 +177,7 @@ const SequencingSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => voi
         >
           {language === 'en' ? 'Check Order' : 'Tirohia te Raupapa'}
         </button>
-      ) : (
+      ) : isCorrect ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -163,6 +192,28 @@ const SequencingSection: React.FC<{ language: 'en' | 'mi'; onComplete: () => voi
               ? "You successfully retold the story!\nValley → Feeding → Abandonment → Rescue → Guardian" 
               : "I whakahāngai tika koe i te pūrākau!\nRaorao → Whāngai → Mahue → Whakaora → Kaitiaki"}
           </p>
+        </motion.div>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-8 bg-rose-50 border-2 border-rose-200 rounded-[2rem] text-center"
+        >
+          <div className="text-5xl mb-4">😢</div>
+          <h4 className="text-2xl font-bold text-rose-800 mb-2">
+            {language === 'en' ? 'Not quite right' : 'Kāore anō kia tika'}
+          </h4>
+          <p className="text-lg text-rose-700 font-medium">
+            {language === 'en' 
+              ? "Try again. The correct order is 1 → 2 → 3 → 4 → 5." 
+              : "Whakamātau anō. Ko te raupapa tika ko 1 → 2 → 3 → 4 → 5."}
+          </p>
+          <button
+            onClick={handleRetry}
+            className="mt-6 px-6 py-3 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700 transition-all"
+          >
+            {language === 'en' ? 'Try Again' : 'Ngana anō'}
+          </button>
         </motion.div>
       )}
     </div>
